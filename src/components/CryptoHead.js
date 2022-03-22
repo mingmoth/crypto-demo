@@ -33,6 +33,11 @@ function CryptoHead({ cryptoCurrency, stableCoin, cryptoPrice, setCryptoPrice })
       // console.log(etheurData.p)
       setCryptoPrice(parseFloat(etheurData.p).toFixed(2))
     }
+
+    // componentWillUnmount就是useEffect第一個用來當參數的函式的return值
+    return (() => {
+      ws.close()
+    })
   });
 
   return (
