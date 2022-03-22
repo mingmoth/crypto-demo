@@ -23,25 +23,26 @@ const CryptoHeadder = styled.div`
   }
 `
 
-function CryptoHead({ etheurPrice, setEtheurPrice }) {
-  const lastPrice = usePrevious(etheurPrice)
-
+function CryptoHead({ cryptoCurrency, stableCoin, cryptoPrice, setCryptoPrice }) {
+  const lastPrice = usePrevious(cryptoPrice)
+  let ws = new WebSocket(`wss://stream.binance.com:9443/ws/${cryptoCurrency}${stableCoin}@trade`)
   useEffect(() => {
-    let ws = new WebSocket('wss://stream.binance.com:9443/ws/ethusdt@trade')
+    
     ws.onmessage = (event) => {
       let etheurData = JSON.parse(event.data)
-      setEtheurPrice(parseFloat(etheurData.p).toFixed(2))
+      // console.log(etheurData.p)
+      setCryptoPrice(parseFloat(etheurData.p).toFixed(2))
     }
-  }, )
+  });
 
   return (
     <CryptoHeadder>
       <div className="crypto-container">
         <div className="crypto-wrapper">
-          <div className='crypto-currency'>ETH</div>
-          <div className="crypto-stable">USDT</div>
+          <div className='crypto-currency'>{cryptoCurrency.toUpperCase()}</div>
+          <div className="crypto-stable">{stableCoin.toUpperCase()}</div>
         </div>
-        <div className="crypto-price" style={{ color: !etheurPrice || etheurPrice === lastPrice ? 'white' : etheurPrice > lastPrice ? 'green' : 'red' }}>{etheurPrice}</div>
+        <div className="crypto-price" style={{ color: !cryptoPrice || !lastPrice || cryptoPrice === lastPrice ? 'white' : cryptoPrice > lastPrice ? 'green' : 'red' }}>{cryptoPrice}</div>
       </div>
     </CryptoHeadder>
   )

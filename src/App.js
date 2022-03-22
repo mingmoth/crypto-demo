@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from '@emotion/styled';
 
 import CryptoHead from './components/CryptoHead'
+import CryptoSetting from './components/CryptoSetting';
 
 import { ReactComponent as CogIcon } from './assets/cog.svg';
 
@@ -29,15 +30,24 @@ const Cog = styled(CogIcon)`
 `
 
 function App() {
-  const [etheurPrice, setEtheurPrice] = useState()
+  const [currentPage, setCurrentPage] = useState('CryptoCard')
+  const [cryptoCurrency, setCryptoCurrency] = useState('eth')
+  const [stableCoin, setStableCoin] = useState('usdt')
+  const [cryptoPrice, setCryptoPrice] = useState()
 
+  
   return (
     <div className="App">
-      <CryptoCard>
-        <Cog />
-        <CryptoHead etheurPrice={etheurPrice} setEtheurPrice={setEtheurPrice} >
-        </CryptoHead>
-      </CryptoCard>
+      {currentPage === "CryptoCard" && (
+        <CryptoCard>
+          <Cog onClick={() => setCurrentPage("CryptoSetting")}/>
+          <CryptoHead cryptoCurrency={cryptoCurrency} stableCoin={stableCoin} cryptoPrice={cryptoPrice} setCryptoPrice={setCryptoPrice} >
+          </CryptoHead>
+        </CryptoCard>
+      )}
+      {currentPage === "CryptoSetting" && (
+        <CryptoSetting setCurrentPage={setCurrentPage} cryptoCurrency={cryptoCurrency} setCryptoCurrency={setCryptoCurrency} stableCoin={stableCoin} setStableCoin={setStableCoin} />
+      )}
     </div>
   );
 }
