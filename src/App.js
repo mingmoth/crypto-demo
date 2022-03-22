@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { usePrevious } from './usePrevious';
+import React, { useState } from 'react';
 import styled from '@emotion/styled';
+
+import CryptoHead from './components/CryptoHead'
 
 import { ReactComponent as CogIcon } from './assets/cog.svg';
 
@@ -27,30 +28,14 @@ const Cog = styled(CogIcon)`
   cursor: pointer;
 `
 
-const CryptoHead = styled.div`
-  
-`
-
 function App() {
   const [etheurPrice, setEtheurPrice] = useState()
-  const lastPrice = usePrevious(etheurPrice)
-
-  useEffect(() => {
-    let ws = new WebSocket('wss://stream.binance.com:9443/ws/ethusdt@trade')
-    ws.onmessage = (event) => {
-      let etheurData = JSON.parse(event.data)
-      setEtheurPrice(parseFloat(etheurData.p).toFixed(2))
-    }
-  }, [etheurPrice])
 
   return (
     <div className="App">
       <CryptoCard>
         <Cog />
-        <CryptoHead>
-          <p style={{ margin: 'none' }}>
-            ETH <span style={{ color: !etheurPrice || etheurPrice === lastPrice ? 'white' : etheurPrice > lastPrice ? 'green' : 'red' }}>{etheurPrice}</span>
-          </p>
+        <CryptoHead etheurPrice={etheurPrice} setEtheurPrice={setEtheurPrice} >
         </CryptoHead>
       </CryptoCard>
     </div>
